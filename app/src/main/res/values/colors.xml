@@ -9,5 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="btnSignUp">#F26F23</color>
     <color name="btnSignActive">#A9d440</color>
+    <color name="overlayBackground">#7f333639</color>
+    <color name="overlayActionbar">#0e0d0e</color>
+
 
 </resources>
