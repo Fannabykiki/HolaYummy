@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,41 +19,48 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 public class FoodList extends AppCompatActivity {
-
-
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    FirebaseDatabase database;
-    DatabaseReference foodList;
-
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private FirebaseDatabase database;
+    private DatabaseReference foodList;
     String categoryId="";
+    private FirebaseRecyclerAdapter<Food, FoodViewHolder> adapter;
 
-    FirebaseRecyclerAdapter<Food, FoodViewHolder> adapter;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private void bindingView() {
         setContentView(R.layout.activity_food_list);
-        database = FirebaseDatabase.getInstance();
-        foodList = database.getReference("Foods");
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_food);
+        recyclerView = findViewById(R.id.recycler_food);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+    }
 
-        if(getIntent() != null){
+    private void bindingAction() {
+        database = FirebaseDatabase.getInstance();
+        foodList = database.getReference("Foods");
+
+        if (getIntent() != null) {
             categoryId = getIntent().getStringExtra("CategoryId");
         }
-        if(!categoryId.isEmpty() && categoryId !=null){
+
+        if (!categoryId.isEmpty() && categoryId != null) {
             loadListFood(categoryId);
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        bindingView();
+        bindingAction();
+    }
+
     private void loadListFood(String categoryId) {
-        adapter = new FirebaseRecyclerAdapter<Food, FoodViewHolder>(Food.class,
+        adapter = new FirebaseRecyclerAdapter<Food, FoodViewHolder>(
+                Food.class,
                 R.layout.food_item,
                 FoodViewHolder.class,
                 foodList.orderByChild("MenuId").equalTo(categoryId)
-                ) {
+        ) {
             @Override
             protected void populateViewHolder(FoodViewHolder viewHolder, Food model, int position) {
                 viewHolder.food_name.setText(model.getName());
@@ -62,12 +70,14 @@ public class FoodList extends AppCompatActivity {
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int pos, boolean isLongClick) {
-                        Toast.makeText(FoodList.this, ""+local.getName(), Toast.LENGTH_SHORT).show();
+                        Intent foodDetail = new Intent(FoodList.this, FoodDetail.class);
+                        foodDetail.putExtra("FoodId", adapter.getRef(pos).getKey());
+                        startActivity(foodDetail);
                     }
                 });
             }
         };
-        Log.d("TAG",""+categoryId);
+
         recyclerView.setAdapter(adapter);
     }
 }
