@@ -42,9 +42,11 @@ public class FoodDetail extends AppCompatActivity {
     float rateValue;
     String temp;
     String foodId="";
-    FirebaseDatabase database;
-    DatabaseReference foods;
-     DatabaseReference ratingTbl;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference foods = database.getReference("Foods");
+     DatabaseReference ratingTbl = database.getReference("Rating");
+
 
     private void bindingView() {
         btnCart = (FloatingActionButton) findViewById(R.id.btnCart);
@@ -102,13 +104,13 @@ public class FoodDetail extends AppCompatActivity {
                 rateValue = ratingBar.getRating();
                 if(rateValue <=1 && rateValue>=0){
                     rateCount.setText("Bad "+ rateValue + "/5");
-                } else if (rateValue<=2&& rateValue <1) {
+                } else if (rateValue<=2&& rateValue >1) {
                     rateCount.setText("Ok "+ rateValue + "/5");
-                }else if (rateValue<=3&& rateValue <2) {
+                }else if (rateValue<=3&& rateValue >2) {
                     rateCount.setText("Good "+ rateValue + "/5");
-                }else if (rateValue<=4&& rateValue <3) {
-                    rateCount.setText("Very "+ rateValue + "/5");
-                }else if (rateValue<=5&& rateValue <4) {
+                }else if (rateValue<=4&& rateValue >3) {
+                    rateCount.setText("Very Good"+ rateValue + "/5");
+                }else if (rateValue<=5&& rateValue >4) {
                     rateCount.setText("Best "+ rateValue + "/5");
                 }
             }
@@ -148,8 +150,7 @@ public class FoodDetail extends AppCompatActivity {
         setContentView(R.layout.activity_food_detail);
 
         database = FirebaseDatabase.getInstance();
-        foods = database.getReference("Foods");
-        foods = database.getReference("Rating");
+
         bindingView();
         bindingAction();
 
@@ -215,7 +216,7 @@ public class FoodDetail extends AppCompatActivity {
                         food_name.setText(food.getName());
                         food_description.setText(food.getDescription());
                     } else {
-                        Log.e("hhaha","Xử lý trường hợp đối tượng Food là null");
+                        Log.e("hhaha","Food là null");
                     }
                 } else {
                     // Xử lý trường hợp dataSnapshot không tồn tại (ví dụ: hiển thị thông báo lỗi)

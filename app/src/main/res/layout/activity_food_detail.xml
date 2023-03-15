@@ -109,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/ratingBarAverage"
-                    android:rating="0"
+                    android:rating="1"
                     android:max="5"
                     android:isIndicator="true"/>
 
@@ -198,7 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/ratingBar"
-                    android:rating="0"
+                    android:rating="1"
                     android:max="5"
                     android:isIndicator="true"/>
                 <TextView

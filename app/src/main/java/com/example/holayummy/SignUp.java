@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class SignUp extends AppCompatActivity {
-    EditText edtPhone, edtName, edtPassword;
+    EditText edtPhone, edtName, edtPassword,edtSecureCode;
     Button btnSignUp;
     FirebaseDatabase dtb = FirebaseDatabase.getInstance();
     DatabaseReference table_user = dtb.getReference("User");
@@ -27,6 +27,7 @@ public class SignUp extends AppCompatActivity {
         edtPhone = findViewById(R.id.edtPhone);
         edtPassword = findViewById(R.id.edtPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
+        edtSecureCode = findViewById(R.id.edtSecureCode);
     }
     private void bindingAction() {
         btnSignUp.setOnClickListener(this::onBtnSignUpClick);
@@ -46,7 +47,9 @@ public class SignUp extends AppCompatActivity {
                     Toast.makeText(SignUp.this, "Phone number already exist", Toast.LENGTH_SHORT).show();
                 } else {
                     mDialog.dismiss();
-                    User user = new User(edtName.getText().toString(),edtPassword.getText().toString());
+                    User user = new User(edtName.getText().toString(),
+                            edtPassword.getText().toString(),
+                            edtSecureCode.getText().toString());
                     table_user.child(edtPhone.getText().toString()).setValue(user);
                     Toast.makeText(SignUp.this, "Sign up successfully", Toast.LENGTH_SHORT).show();
                     finish();
