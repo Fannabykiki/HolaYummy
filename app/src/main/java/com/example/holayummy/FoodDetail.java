@@ -129,6 +129,7 @@ public class FoodDetail extends AppCompatActivity {
                         } else {
                             ratingTbl.child(Common.currentUser.getName()).setValue(rating);
                         }
+                        Toast.makeText(FoodDetail.this, "Thanks for rating", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -165,7 +166,7 @@ public class FoodDetail extends AppCompatActivity {
 
            if(Common.isConnectedToInternet(getBaseContext())){
                getDetailFood(foodId);
-//               getRatingFood(foodId);
+               getRatingFood(foodId);
            } else {
                Toast.makeText(this, "Please check connection!!", Toast.LENGTH_SHORT).show();
                return;
@@ -184,14 +185,22 @@ public class FoodDetail extends AppCompatActivity {
             int count =0, sum = 0;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot postSnapshot:snapshot.getChildren()){
-                    Rating item = postSnapshot.getValue(Rating.class);
-                    sum+=Integer.parseInt(item.getRateValue());
-                    count++;
+                try {
+                    for(DataSnapshot postSnapshot:snapshot.getChildren()){
+
+                        Rating item = postSnapshot.getValue(Rating.class);
+                        sum+=Double.parseDouble(item.getRateValue());
+                        count++;
+                    }
+                } catch (NumberFormatException e){
+
                 }
+
                 if(count!=0){
                     float average = sum/count;
+                    Toast.makeText(FoodDetail.this, String.valueOf(average), Toast.LENGTH_SHORT).show();
                     ratingBarAverage.setRating(average);
+
                 }
             }
 

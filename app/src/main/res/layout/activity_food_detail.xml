@@ -109,8 +109,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/ratingBarAverage"
-                    android:rating="1"
-                    android:max="5"
+
+
                     android:isIndicator="true"/>
 
                 <LinearLayout
@@ -199,8 +199,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/ratingBar"
                     android:rating="1"
-                    android:max="5"
-                    android:isIndicator="true"/>
+
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
