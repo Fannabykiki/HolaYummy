@@ -72,7 +72,7 @@
             android:layout_width="0dp"
             android:text="Sign In"
             android:layout_margin="20dp"
-            android:textColor="@color/fbutton_color_midnight_blue"
+            android:textColor="@color/white"
             android:layout_height="wrap_content"
             android:shadowColor="@android:color/black"
             app:shadowEnabled="true"

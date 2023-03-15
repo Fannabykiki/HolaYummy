@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/backgr"
+    tools:context=".Cart">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listCart"
+        android:background="@color/fbutton_color_transparent"
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:cardBackgroundColor="#F26f21"
+        android:layout_alignParentBottom="true"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total:"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                ></TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/total"
+                android:text="$0,0"
+                android:textSize="24dp"
+                android:textColor="@color/white"
+                >
+
+            </TextView></LinearLayout>
+            <Button
+                android:layout_alignParentBottom="true"
+                android:backgroundTint="@color/btnSignUp"
+                android:id="@+id/btnPlaceOrder"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:text="Place order"
+                android:layout_margin="10dp"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:shadowColor="@android:color/black"
+                app:shadowEnabled="true"
+                app:shadowHeight="5dp"
+                app:cornerRadius="5dp"
+                >
+            </Button>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

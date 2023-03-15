@@ -3,8 +3,11 @@ package com.example.holayummy.Model;
 public class User {
     private String Name;
     private String Password;
+
     private String secureCode;
     private String IsStaff;
+
+
 
     public String getName() {
         return Name;

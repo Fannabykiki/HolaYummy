@@ -13,9 +13,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.holayummy.Common.Common;
 import com.example.holayummy.Model.Food;
 import com.example.holayummy.Model.Rating;
+import com.example.holayummy.Database.Database;
+import com.example.holayummy.Model.Order;
+
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -43,9 +47,12 @@ public class FoodDetail extends AppCompatActivity {
     String temp;
     String foodId="";
 
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference foods = database.getReference("Foods");
      DatabaseReference ratingTbl = database.getReference("Rating");
+
+    Food currentFood;
 
 
     private void bindingView() {
@@ -67,7 +74,15 @@ public class FoodDetail extends AppCompatActivity {
         EditText editText = findViewById(R.id.itemQuan);
         Button buttonPlus = findViewById(R.id.addBtn);
         Button buttonMinus = findViewById(R.id.removeBtn);
-
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Database(getBaseContext()).addToCart(new Order(
+                        foodId,currentFood.getName(),editText.getText().toString(),currentFood.getPrice(),currentFood.getDiscount()
+                ));
+                Toast.makeText(FoodDetail.this, "Added to cart", Toast.LENGTH_SHORT).show();
+            }
+        });
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +200,7 @@ public class FoodDetail extends AppCompatActivity {
             int count =0, sum = 0;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 try {
                     for(DataSnapshot postSnapshot:snapshot.getChildren()){
 
@@ -202,6 +218,16 @@ public class FoodDetail extends AppCompatActivity {
                     ratingBarAverage.setRating(average);
 
                 }
+
+                currentFood = snapshot.getValue(Food.class);
+
+                Picasso.with(getBaseContext()).load(currentFood.getImage()).into(food_image);
+
+                collapsingToolbarLayout.setTitle(currentFood.getName());
+                food_price.setText(currentFood.getPrice());
+                food_name.setText(currentFood.getName());
+                food_description.setText(currentFood.getDescription());
+
             }
 
             @Override
