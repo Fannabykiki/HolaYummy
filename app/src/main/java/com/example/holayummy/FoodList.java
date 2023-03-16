@@ -11,6 +11,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.holayummy.Interface.ItemClickListener;
@@ -39,6 +42,9 @@ public class FoodList extends AppCompatActivity {
     private FirebaseRecyclerAdapter<Food, FoodViewHolder> searchAdapter;
     List<String> suggestList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
+
+
+
 
     private void bindingView() {
         setContentView(R.layout.activity_food_list);

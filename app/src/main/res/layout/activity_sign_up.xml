@@ -63,6 +63,23 @@
             app:met_singleLineEllipsis="true"
             ></com.rengwuxian.materialedittext.MaterialEditText>
 
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Secure Code"
+            android:textColorHint="@color/black"
+            android:id="@+id/edtSecureCode"
+            android:text="1234"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:inputType="text"
+            app:met_baseColor="@color/black"
+            app:met_floatingLabel="highlight"
+            app:met_maxCharacters="11"
+            app:met_primaryColor="@color/black"
+            app:met_singleLineEllipsis="true"
+            ></com.rengwuxian.materialedittext.MaterialEditText>
+
     </LinearLayout>
 
     <LinearLayout
