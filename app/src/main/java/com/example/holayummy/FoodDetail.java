@@ -34,6 +34,8 @@ import java.util.Arrays;
 import java.util.Queue;
 
 public class FoodDetail extends AppCompatActivity {
+
+    private ValueEventListener mListener;
     TextView food_name, food_price,food_description;
     ImageView food_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -50,7 +52,7 @@ public class FoodDetail extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference foods = database.getReference("Foods");
-     DatabaseReference ratingTbl = database.getReference("Rating");
+    DatabaseReference ratingTbl = database.getReference("Rating" + "/" + foodId);
 
     Food currentFood;
 
@@ -109,7 +111,7 @@ public class FoodDetail extends AppCompatActivity {
         btnRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showRatingDialog();
+
             }
         });
 
@@ -132,17 +134,22 @@ public class FoodDetail extends AppCompatActivity {
         });
 
         submit.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Rating rating = new Rating(Common.currentUser.getName(),foodId,String.valueOf(rateValue),String.valueOf(review));
-                ratingTbl.child(Common.currentUser.getName()).addValueEventListener(new ValueEventListener() {
+                Rating rating = new Rating(Common.currentUser.getPhone(),foodId,String.valueOf(rateValue),String.valueOf(review.getText()));
+
+
+                mListener = ratingTbl.child(Common.currentUser.getPhone()+foodId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.child(Common.currentUser.getName()).exists()){
-                            ratingTbl.child(Common.currentUser.getName()).removeValue();
-                            ratingTbl.child(Common.currentUser.getName()).setValue(rating);
+                        ratingTbl.child(Common.currentUser.getPhone()).removeEventListener(mListener);
+                        if(snapshot.child(Common.currentUser.getPhone()).exists()){
+                            ratingTbl.child(Common.currentUser.getPhone()).removeValue();
+
+                            ratingTbl.child(Common.currentUser.getPhone()).setValue(rating);
                         } else {
-                            ratingTbl.child(Common.currentUser.getName()).setValue(rating);
+                            ratingTbl.child(Common.currentUser.getPhone()).setValue(rating);
                         }
                         Toast.makeText(FoodDetail.this, "Thanks for rating", Toast.LENGTH_SHORT).show();
                     }
@@ -151,14 +158,14 @@ public class FoodDetail extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
+
                 });
+
             }
         });
     }
 
-    private void showRatingDialog() {
 
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,41 +199,30 @@ public class FoodDetail extends AppCompatActivity {
 
     private void getRatingFood(String foodId) {
         Query foodRating = ratingTbl.orderByChild("foodId").equalTo(foodId);
-        Log.d("querry", String.valueOf(ratingTbl.orderByChild("foodId")));
-        Log.d("haha",foodId);
-
 
         foodRating.addValueEventListener(new ValueEventListener() {
             int count =0, sum = 0;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                try {
+
                     for(DataSnapshot postSnapshot:snapshot.getChildren()){
 
                         Rating item = postSnapshot.getValue(Rating.class);
                         sum+=Double.parseDouble(item.getRateValue());
                         count++;
                     }
-                } catch (NumberFormatException e){
 
-                }
 
                 if(count!=0){
                     float average = sum/count;
-                    Toast.makeText(FoodDetail.this, String.valueOf(average), Toast.LENGTH_SHORT).show();
                     ratingBarAverage.setRating(average);
 
                 }
 
-                currentFood = snapshot.getValue(Food.class);
 
-                Picasso.with(getBaseContext()).load(currentFood.getImage()).into(food_image);
 
-                collapsingToolbarLayout.setTitle(currentFood.getName());
-                food_price.setText(currentFood.getPrice());
-                food_name.setText(currentFood.getName());
-                food_description.setText(currentFood.getDescription());
+
 
             }
 
@@ -245,6 +241,7 @@ public class FoodDetail extends AppCompatActivity {
                     Food food = snapshot.getValue(Food.class);
 
                     if (food != null) {
+                        currentFood = snapshot.getValue(Food.class);
                         Picasso.with(getBaseContext()).load(food.getImage()).into(food_image);
                         collapsingToolbarLayout.setTitle(food.getName());
                         food_price.setText(food.getPrice());
@@ -267,5 +264,11 @@ public class FoodDetail extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mListener != null){
+            ratingTbl.removeEventListener(mListener);
+        }
+    }
 }
