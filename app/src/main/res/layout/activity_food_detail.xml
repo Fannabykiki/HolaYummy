@@ -27,7 +27,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/img_food"
                 android:contentDescription="@null"
-                app:layout_collapseMode="parallax"/>
+                app:layout_collapseMode="parallax"
+                android:background="#f26f21"/>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -102,7 +103,7 @@
                     android:layout_marginTop="8dp"
                     android:padding="12dp"
                     android:text="Food Name"
-                    android:textColor="@color/design_default_color_primary"
+                    android:textColor="#f26f21"
                     android:textSize="20sp"
                     android:textStyle="bold"></TextView>
                 <RatingBar
@@ -130,7 +131,7 @@
                         android:id="@+id/food_price"
 
                         android:text="1,000"
-                        android:textColor="@color/design_default_color_primary"
+                        android:textColor="#f26f21"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_weight="9"></TextView>
@@ -149,7 +150,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:background="@drawable/custom_btn_remove"
-                        android:backgroundTint="#808080"/>
+                        android:backgroundTint="#f26f21"/>
 
                     <EditText
                         android:id="@+id/itemQuan"
@@ -170,7 +171,9 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:background="@drawable/custom_btn_add"
-                        android:backgroundTint="#808080"/>
+                        android:backgroundTint="#f26f21"
+android:textColor="#f26f21"
+                        />
                 </RelativeLayout>
             </LinearLayout>
 
