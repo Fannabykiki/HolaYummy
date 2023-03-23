@@ -2,7 +2,10 @@ package com.example.holayummy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.controls.actions.FloatAction;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -16,10 +19,12 @@ import com.example.holayummy.Model.Category;
 import com.example.holayummy.Model.Order;
 import com.example.holayummy.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -37,7 +42,6 @@ import com.squareup.picasso.Picasso;
 
 public class Home extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
 
@@ -47,10 +51,11 @@ public class Home extends AppCompatActivity implements
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarHome.toolbar);
@@ -61,16 +66,19 @@ public class Home extends AppCompatActivity implements
         category = dtb.getReference("Category");
 
 
-
-        binding.appBarHome.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cartInter = new Intent(Home.this,Cart.class);
-                startActivity(cartInter);
-            }
+        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton order = findViewById(R.id.order);
+        binding.appBarHome.order.setOnClickListener(view -> {
+            Intent orderInter = new Intent(Home.this,OrderStatus.class);
+            startActivity(orderInter);
+        });
+        binding.appBarHome.fab.setOnClickListener(view -> {
+            Intent cartInter = new Intent(Home.this,Cart.class);
+            startActivity(cartInter);
         });
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -98,7 +106,7 @@ public class Home extends AppCompatActivity implements
             @Override
             protected void populateViewHolder(MenuViewHolder menuViewHolder, Category category, int i) {
                 menuViewHolder.txtMenuName.setText(category.getName());
-                Picasso.with(getBaseContext()).load(category.getImgage())
+                Picasso.with(getBaseContext()).load(category.getImage())
                         .into(menuViewHolder.ImageView);
                 Category clickItem = category;
                 menuViewHolder.setItemClickListener(new ItemClickListener() {
@@ -116,9 +124,20 @@ public class Home extends AppCompatActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        inflater.inflate(R.menu.home, menu);
         return true;
     }
 
@@ -128,31 +147,44 @@ public class Home extends AppCompatActivity implements
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.logout:
+                Intent signIn = new Intent(Home.this, SignIn.class);
+                signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(signIn);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        Log.d("Navigation Item Selected", "ID: " + id); // In ra giá trị của biến id
 
         if(id == R.id.nav_menu){
 
         } else if (id == R.id.nav_cart) {
+            Toast.makeText(this, "Nav cart is press", Toast.LENGTH_SHORT).show();
             Intent cartIntent = new Intent(Home.this, Cart.class);
             startActivity(cartIntent);
-            return true;
         } else if (id == R.id.nav_orders) {
+            Toast.makeText(this, "Nav orders is press", Toast.LENGTH_SHORT).show();
+
             Intent orderIntent = new Intent(Home.this, OrderStatus.class);
             startActivity(orderIntent);
-            return true;
         } else if (id == R.id.nav_log_out) {
+            Toast.makeText(this, "Nav log out is press", Toast.LENGTH_SHORT).show();
+
             Intent signIn = new Intent(Home.this, SignIn.class);
-            signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(signIn);
-            return true;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return false;
+        return true;
     }
 
 }

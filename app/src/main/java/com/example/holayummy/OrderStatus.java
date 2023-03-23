@@ -46,21 +46,24 @@ public class OrderStatus extends AppCompatActivity {
             protected void populateViewHolder(OrderViewHolder orderViewHolder, Request request, int i) {
                 orderViewHolder.txtOrderId.setText(adapter.getRef(i).getKey());
                 orderViewHolder.txtOrderStatus.setText(convertCodeToStatus(request.getStatus()));
-                orderViewHolder.txtOrderId.setText(request.getAddress());
-                orderViewHolder.txtOrderId.setText(request.getPhone());
-
+                orderViewHolder.txtOrderAddress.setText(request.getAddress());
+                orderViewHolder.txtOrderPhone.setText(request.getPhone());
             }
         };
         recyclerView.setAdapter(adapter);
     }
 
     private String convertCodeToStatus(String status) {
-        if(status.equals("0"))
-            return "Placed";
-         else if (status.equals("1"))
-            return "On my way";
-         else
-             return  "Shipped";
+        if(status != null) {
+            if(status.equals("0"))
+                return "Đã đặt";
+            else if (status.equals("1"))
+                return "Đang giao hàng";
+            else
+                return  "Đã giao";
+        } else {
+            return "Chưa rõ trạng thái";
+        }
     }
 
     @Override
