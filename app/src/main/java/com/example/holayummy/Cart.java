@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import com.example.holayummy.Model.Request;
 import com.example.holayummy.ViewHolder.CartAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -60,21 +62,22 @@ public class Cart extends AppCompatActivity {
         alerDiaglog.setTitle("One more step!!");
         alerDiaglog.setMessage("Enter your address:");
 
-        final EditText edtAddress = new EditText(Cart.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-        );
-        edtAddress.setLayoutParams(lp);
-        alerDiaglog.setView(edtAddress);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View order_address_comment = inflater.inflate(R.layout.order_address_comment,null);
+        MaterialEditText editAddress = (MaterialEditText)order_address_comment.findViewById(R.id.edtAddress);
+        MaterialEditText editComment = (MaterialEditText)order_address_comment.findViewById(R.id.edtComment);
+
+        alerDiaglog.setView(order_address_comment);
         alerDiaglog.setIcon(R.drawable.baseline_shopping_cart_24);
 
         alerDiaglog.setPositiveButton("Yes", (dialogInterface, i) -> {
             Request request = new Request(
                     Common.currentUser.getPhone(),
                     Common.currentUser.getName(),
-                    edtAddress.getText().toString(),
+                    editAddress.getText().toString(),
                     txtTotal.getText().toString(),
+                    "0",
+                    editComment.getText().toString(),
                     cart
             );
             requests.child(String.valueOf(System.currentTimeMillis())).setValue(request);
