@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.service.controls.actions.FloatAction;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -41,7 +42,6 @@ import com.squareup.picasso.Picasso;
 
 public class Home extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
 
@@ -51,6 +51,7 @@ public class Home extends AppCompatActivity implements
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,8 +135,9 @@ public class Home extends AppCompatActivity implements
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        inflater.inflate(R.menu.home, menu);
         return true;
     }
 
@@ -147,7 +149,14 @@ public class Home extends AppCompatActivity implements
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.logout:
+                Intent signIn = new Intent(Home.this, SignIn.class);
+                signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(signIn);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
