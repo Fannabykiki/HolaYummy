@@ -2,14 +2,14 @@ package com.example.holayummy.Model;
 
 public class Category {
     private String Name;
-    private String Imgage;
+    private String Image;
 
     public Category() {
     }
 
-    public Category(String name, String imgage) {
+    public Category(String name, String image) {
         Name = name;
-        Imgage = imgage;
+        Image = image;
     }
 
     public String getName() {
@@ -20,11 +20,11 @@ public class Category {
         Name = name;
     }
 
-    public String getImgage() {
-        return Imgage;
+    public String getImage() {
+        return Image;
     }
 
-    public void setImgage(String imgage) {
-        Imgage = imgage;
+    public void setImage(String image) {
+        Image = image;
     }
 }
