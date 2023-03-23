@@ -17,18 +17,18 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public ItemClickListener itemClickListener;
 
     private void bindingView() {
+
+    }
+    private void bindingAction() {
+
+    }
+    public OrderViewHolder(@NonNull View itemView) {
+        super(itemView);
         txtOrderAddress = itemView.findViewById(R.id.order_address);
         txtOrderId = itemView.findViewById(R.id.order_id);
         txtOrderPhone = itemView.findViewById(R.id.order_phone);
         txtOrderStatus = itemView.findViewById(R.id.order_status);
-    }
-    private void bindingAction() {
         itemView.setOnClickListener(this);
-    }
-    public OrderViewHolder(@NonNull View itemView) {
-        super(itemView);
-        bindingView();
-        bindingAction();
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {

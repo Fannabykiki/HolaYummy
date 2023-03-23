@@ -2,6 +2,8 @@ package com.example.holayummy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.controls.actions.FloatAction;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +18,12 @@ import com.example.holayummy.Model.Category;
 import com.example.holayummy.Model.Order;
 import com.example.holayummy.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -50,8 +54,7 @@ public class Home extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarHome.toolbar);
@@ -62,16 +65,19 @@ public class Home extends AppCompatActivity implements
         category = dtb.getReference("Category");
 
 
-
-        binding.appBarHome.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cartInter = new Intent(Home.this,Cart.class);
-                startActivity(cartInter);
-            }
+        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton order = findViewById(R.id.order);
+        binding.appBarHome.order.setOnClickListener(view -> {
+            Intent orderInter = new Intent(Home.this,OrderStatus.class);
+            startActivity(orderInter);
+        });
+        binding.appBarHome.fab.setOnClickListener(view -> {
+            Intent cartInter = new Intent(Home.this,Cart.class);
+            startActivity(cartInter);
         });
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -117,6 +123,16 @@ public class Home extends AppCompatActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
@@ -130,8 +146,13 @@ public class Home extends AppCompatActivity implements
                 || super.onSupportNavigateUp();
     }
     @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        Log.d("Navigation Item Selected", "ID: " + id); // In ra giá trị của biến id
 
         if(id == R.id.nav_menu){
 
