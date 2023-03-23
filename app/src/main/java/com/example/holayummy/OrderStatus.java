@@ -46,8 +46,8 @@ public class OrderStatus extends AppCompatActivity {
             protected void populateViewHolder(OrderViewHolder orderViewHolder, Request request, int i) {
                 orderViewHolder.txtOrderId.setText(adapter.getRef(i).getKey());
                 orderViewHolder.txtOrderStatus.setText(convertCodeToStatus(request.getStatus()));
-                orderViewHolder.txtOrderId.setText(request.getAddress());
-                orderViewHolder.txtOrderId.setText(request.getPhone());
+                orderViewHolder.txtOrderAddress.setText(request.getAddress());
+                orderViewHolder.txtOrderPhone.setText(request.getPhone());
 
             }
         };

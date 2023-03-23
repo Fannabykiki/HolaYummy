@@ -51,6 +51,7 @@ public class Home extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarHome.toolbar);
@@ -98,7 +99,7 @@ public class Home extends AppCompatActivity implements
             @Override
             protected void populateViewHolder(MenuViewHolder menuViewHolder, Category category, int i) {
                 menuViewHolder.txtMenuName.setText(category.getName());
-                Picasso.with(getBaseContext()).load(category.getImgage())
+                Picasso.with(getBaseContext()).load(category.getImage())
                         .into(menuViewHolder.ImageView);
                 Category clickItem = category;
                 menuViewHolder.setItemClickListener(new ItemClickListener() {
@@ -128,7 +129,6 @@ public class Home extends AppCompatActivity implements
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -136,23 +136,25 @@ public class Home extends AppCompatActivity implements
         if(id == R.id.nav_menu){
 
         } else if (id == R.id.nav_cart) {
+            Toast.makeText(this, "Nav cart is press", Toast.LENGTH_SHORT).show();
             Intent cartIntent = new Intent(Home.this, Cart.class);
             startActivity(cartIntent);
-            return true;
         } else if (id == R.id.nav_orders) {
+            Toast.makeText(this, "Nav orders is press", Toast.LENGTH_SHORT).show();
+
             Intent orderIntent = new Intent(Home.this, OrderStatus.class);
             startActivity(orderIntent);
-            return true;
         } else if (id == R.id.nav_log_out) {
+            Toast.makeText(this, "Nav log out is press", Toast.LENGTH_SHORT).show();
+
             Intent signIn = new Intent(Home.this, SignIn.class);
-            signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(signIn);
-            return true;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return false;
+        return true;
     }
 
 }
